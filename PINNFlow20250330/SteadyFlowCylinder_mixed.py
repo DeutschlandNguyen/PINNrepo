@@ -16,7 +16,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '0'  # CPU:-1; GPU0: 1; GPU1: 0;
 
 random.seed(1234)
 np.random.seed(1234)
-tf.set_random_seed(1234)
+tf.random.set_seed(1234)
 
 class PINN_laminar_flow:
     # Initialize the class
@@ -116,7 +116,7 @@ class PINN_laminar_flow:
                                                           var_list=self.uv_weights + self.uv_biases)
 
         # tf session
-        self.sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
+        self.sess = tf.Session(config=tf.compat.v1.ConfigProto(allow_soft_placement=True,
                                                      log_device_placement=True))
         init = tf.global_variables_initializer()
         self.sess.run(init)
@@ -515,9 +515,9 @@ if __name__ == "__main__":
     plt.show()
 
     with tf.device('/device:GPU:0'):
-        config = tf.ConfigProto()
+        config = tf.compat.v1.ConfigProto()
         config.gpu_options.allow_growth = True
-        session = tf.Session(config=config)
+        session = tf.compat.v1.Session(config=config)
 
         # Train from scratch
         # model = PINN_laminar_flow(XY_c, INLET, OUTLET, WALL, uv_layers, lb, ub)
